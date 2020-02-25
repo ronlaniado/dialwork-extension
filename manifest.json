@@ -1,0 +1,6 @@
+{
+    "name": "Chrome Extension",
+    "version": "0.1",
+    "description": "Chrome extension by dail.work that helps you apply to jobs",
+    "manifest_version": 2
+}
