@@ -1,0 +1,13 @@
+.input-left {
+	border-top-right-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
+}
+
+.input-right {
+	border-top-left-radius: 0px !important;
+	border-bottom-left-radius: 0px !important;
+}
+
+#cancel:hover {
+	cursor: pointer;
+}
