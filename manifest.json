@@ -27,6 +27,7 @@
     "permissions": [
         "declarativeContent",
         "storage",
+        "tabs",
         "activeTab"
     ],
     "content_scripts": [
@@ -35,10 +36,12 @@
                 "http://*/*",
                 "https://*/*"
             ],
+            "all_frames": true,
             "js": [
                 "jQuery-3.4.1.js"
             ]
         }
     ],
+    "options_page": "options.html",
     "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'"
 }
