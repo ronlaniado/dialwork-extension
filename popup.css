@@ -1,0 +1,8 @@
+.container {
+	min-width: 320px;
+	text-align: center;
+}
+
+.values {
+	word-wrap: none;
+}
