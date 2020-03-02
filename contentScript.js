@@ -7,7 +7,7 @@ if (typeof input === "undefined") {
 getInfo();
 
 function getInfo() {
-	$("input[name]").each(function() {
+	$("body input[name]").each(function() {
 		if ($(this).val() !== "") {
 			// Stores all non-empty inputs into an object
 			input[$(this).attr("name")] = $(this).val();
