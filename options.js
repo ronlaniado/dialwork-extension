@@ -50,13 +50,11 @@ const renderData = (result) => {
 };
 
 const bindOnBlur = () => {
-	$("#input-group :input").blur((e) => {
+	$(":input").blur((e) => {
 		if (e.target.value.length === 0) {
 			const parentId = e.target.parentNode.id;
 			$(`#${$.escapeSelector(parentId)}`).remove();
 			$(".save-button").css("display", "block");
-		} else {
-			chrome.runtime.sync.set({});
 		}
 	});
 };
@@ -75,10 +73,15 @@ const bindButtonClick = () => {
 	$(".save-button").click((e) => {
 		let dataString = "";
 		let data = {};
+		let url = "";
 		console.log("button clicked!");
+		// search through and find all inputs, then push them into a javascript array. Every other input should be paired as a key:value
+		// set the title to the const url
+		// make title the outmost key, with the values being a nested object
+		// nested object will have the key value pairs as mentioned above
 		$(".data-container").each(() => {
 			dataString;
-			let url = $("h5").text();
+			url = $("h5").text();
 			data[url] = {};
 			$(".input-group").each((i, val) => {
 				let key = $(val)
@@ -89,12 +92,12 @@ const bindButtonClick = () => {
 					.val();
 				data[url][key] = value;
 			});
-			console.log(data);
+			console.log(url);
 		});
 
-		// search through and find all inputs, then push them into a javascript array. Every other input should be paired as a key:value
-		// set the title to the const url
-		// make title the outmost key, with the values being a nested object
-		// nested object will have the key value pairs as mentioned above
+		// update new object in using chrome's storage api
+		chrome.storage.sync.set({ [url]: data[url] }, () => {
+			console.log("Chrome storage has been updated!");
+		});
 	});
 };
