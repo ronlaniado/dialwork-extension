@@ -1,19 +1,9 @@
 chrome.runtime.onInstalled.addListener(function() {
 	console.log("Background script has been installed successfully.");
-});
-
-chrome.storage.onChanged.addListener((changes, namespace) => {
-	for (let key in changes) {
-		let storageChange = changes[key];
-		console.log(
-			'Storage key "%s" in namespace "%s" changed. ' + 'Old value was "%s", new value is "%s".',
-			key,
-			namespace,
-			storageChange.oldValue,
-			storageChange.newValue
-		);
-		console.log(changes);
-	}
+	chrome.storage.sync.clear();
+	chrome.storage.sync.set({ formData: {} }, () => {
+		console.log("Form has been saved to storage");
+	});
 });
 
 let keys;
