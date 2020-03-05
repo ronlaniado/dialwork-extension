@@ -14,7 +14,7 @@ $(document).ready(() => {
 
 const getData = (keys) => {
 	chrome.storage.sync.get(keys, (result) => {
-		renderDefaultProfile(result);
+		//renderDefaultProfile(result);
 	});
 };
 
