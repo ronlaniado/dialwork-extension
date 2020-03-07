@@ -1,15 +1,17 @@
 $(document).ready(() => {
-	chrome.runtime.sendMessage({ message: "keyRequest" }, (response) => {
-		//Sends a message to the background script telling it that options.html is active, and that we want the keys.
-		let keys = response.farewell;
-		getData(keys);
-	});
+	// chrome.runtime.sendMessage({ message: "keyRequest" }, (response) => {
+	// 	//Sends a message to the background script telling it that options.html is active, and that we want the keys.
+	// 	let keys = response.farewell;
+	// 	getData(keys);
+	// });
+	// I may not need to above function, I can simply pull the formData variable from chromeStorage!
+	getData();
 });
 
-const getData = (keys) => {
-	chrome.storage.sync.get(keys, (result) => {
-		console.log(result);
-		renderData(result);
+const getData = () => {
+	chrome.storage.sync.get("formData", (result) => {
+		console.log(result.formData);
+		renderData(result.formData);
 	});
 };
 
@@ -32,7 +34,7 @@ const renderData = (result) => {
 		const saveButton =
 			"<button class='btn btn-warning center save-button' type='button' style='display:none'>Save changes</button>";
 		$(".container").append(
-			"<div class='bg-info rounded-sm py-5 px-3 data-container'>" +
+			`<div class='bg-info rounded-sm py-5 px-3 m-2 data-container' id="${url}">` +
 				title +
 				"<div>" +
 				rows +
@@ -42,21 +44,10 @@ const renderData = (result) => {
 		);
 	}
 
-	bindOnBlur();
 	// bind on blur adds the detection to check for empty inputs in order to remove them
 
 	bindCancel();
 	bindButtonClick();
-};
-
-const bindOnBlur = () => {
-	$(":input").blur((e) => {
-		if (e.target.value.length === 0) {
-			const parentId = e.target.parentNode.id;
-			$(`#${$.escapeSelector(parentId)}`).remove();
-			$(".save-button").css("display", "block");
-		}
-	});
 };
 
 const bindCancel = () => {
@@ -75,29 +66,38 @@ const bindButtonClick = () => {
 		let data = {};
 		let url = "";
 		console.log("button clicked!");
-		// search through and find all inputs, then push them into a javascript array. Every other input should be paired as a key:value
-		// set the title to the const url
-		// make title the outmost key, with the values being a nested object
-		// nested object will have the key value pairs as mentioned above
-		$(".data-container").each(() => {
+		let parentId = e.target.parentNode.id;
+		console.log(parentId);
+		$("#" + $.escapeSelector(parentId)).each(() => {
 			dataString;
-			url = $("h5").text();
-			data[url] = {};
+			url = parentId;
+			console.log(url);
+			data = {};
 			$(".input-group").each((i, val) => {
+				console.log(i);
 				let key = $(val)
 					.find("input:nth-child(1)")
 					.val();
 				let value = $(val)
 					.find("input:nth-child(2)")
 					.val();
-				data[url][key] = value;
+				data[key] = value;
 			});
-			console.log(url);
 		});
-
+		console.log(data);
 		// update new object in using chrome's storage api
-		chrome.storage.sync.set({ [url]: data[url] }, () => {
-			console.log("Chrome storage has been updated!");
+		chrome.storage.sync.get("formData", (result) => {
+			let chromeData = result.formData;
+			chromeData[url] = data;
+			console.log(chromeData);
+
+			chrome.storage.sync.set({ formData: chromeData }, () => {
+				console.log("Form saved to storage!");
+				chrome.storage.sync.get("formData", (result) => {
+					let localData = result.formData;
+					console.log("New data from chrome is: " + localData);
+				});
+			});
 		});
 	});
 };
