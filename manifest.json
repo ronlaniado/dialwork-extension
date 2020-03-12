@@ -28,7 +28,9 @@
         "declarativeContent",
         "storage",
         "tabs",
-        "activeTab"
+        "activeTab",
+        "clipboardWrite",
+        "clipboardRead"
     ],
     "content_scripts": [
         {
