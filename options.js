@@ -1,10 +1,4 @@
 $(document).ready(() => {
-	// chrome.runtime.sendMessage({ message: "keyRequest" }, (response) => {
-	// 	//Sends a message to the background script telling it that options.html is active, and that we want the keys.
-	// 	let keys = response.farewell;
-	// 	getData(keys);
-	// });
-	// I may not need to above function, I can simply pull the formData variable from chromeStorage!
 	getData();
 });
 
@@ -16,20 +10,22 @@ const getData = () => {
 };
 
 const renderData = (result) => {
-	// Renders a collapsible list for each link that has key:value pairs inside of it
 	console.log(result);
 	let title = "";
 	let rows = "";
 	for (const url in result) {
-		title = `<h5 class='text-white text-center' id="${url}">` + url + "</h5>";
+		title = `<h5 class='text-white text-center' id="${result[url]}">url</h5>`;
 		rows = "";
 		for (const value in result[url]) {
-			rows +=
-				"<div class='input-group input-group-sm d-flex flex-row my-2' id=" +
-				value +
-				`><input type='text' class='form-control font-weight-bold input-left key' value="${value}">` +
-				`</input><input type='text' class='form-control input-right value' value="${result[url][value]}"/ aria-describedby='cancel'>` +
-				"</input><div class='input-group-append cancel-button'><span class='input-group-text' id='cancel'>X</span></div></div>";
+			console.log(result[url]);
+			console.log(value);
+			rows += `<div class='input-group input-group-sm d-flex flex-row my-2' id="${value}">
+					<input type='text' class='form-control font-weight-bold input-left key' value="${value}" />
+					<input type='text' class='form-control input-right value' value="${result[url][value]["value"]}"/ aria-describedby='cancel' />
+					<div class='input-group-append cancel-button'>
+						<span class='input-group-text' id='cancel'>X</span>
+					</div>
+				</div>`;
 		}
 		const saveButton =
 			"<button class='btn btn-warning center save-button' type='button' style='display:none'>Save changes</button>";
@@ -43,11 +39,9 @@ const renderData = (result) => {
 				"</div></div>"
 		);
 	}
-
-	// bind on blur adds the detection to check for empty inputs in order to remove them
-
 	bindCancel();
-	bindButtonClick();
+	bindSaveButton();
+	bindInputChange();
 };
 
 const bindCancel = () => {
@@ -60,7 +54,7 @@ const bindCancel = () => {
 	});
 };
 
-const bindButtonClick = () => {
+const bindSaveButton = () => {
 	$(".save-button").click((e) => {
 		let dataString = "";
 		let data = {};
@@ -101,3 +95,13 @@ const bindButtonClick = () => {
 		});
 	});
 };
+
+const bindInputChange = () => {
+	$(".form-control").on("change", () => {
+		$(".save-button").css("display", "block");
+	});
+};
+
+const selectorOptions = `
+<option></option>
+`;
