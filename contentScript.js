@@ -4,8 +4,20 @@ if (typeof input === "undefined") {
 	window.input = new Object();
 }
 $(document).ready(() => {
-	getInfo();
+	addListeners();
 });
+
+const addListeners = () => {
+	chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+		if (request.message === "execCollectInfo") {
+			console.log("collecting info!");
+			getInfo();
+		} else if (request.message === "execAutofill") {
+			console.log("Autofilling the forms on this page!");
+			autofill();
+		}
+	});
+};
 
 const getInfo = () => {
 	$("body input[name]").each(function() {
@@ -41,6 +53,32 @@ const updateInfo = (keys, values) => {
 			chrome.storage.sync.get("formData", (result) => {
 				console.log(result.formData);
 			});
+		});
+	});
+};
+
+const autofill = () => {
+	chrome.storage.sync.get("formData", (result) => {
+		let data = result.formData.defaultProfile;
+		console.log(data);
+		$("input").each(function() {
+			// Get all keys from data
+			// Interate through the indices of the keys
+			// For each index, find the autocomplete key and set its value to $(this).val(autocompleteValue)
+			let dataKeys = Object.keys(data);
+
+			for (let i = 0; i < dataKeys.length; i++) {
+				let inputName = $(this).attr("name");
+				if ($(this).attr("autocomplete") === data[dataKeys[i]]["autofill"]) {
+					// Matches autofilling values from data
+					$(this).val(data[dataKeys[i]]["value"]);
+				} else if (typeof inputName !== "undefined" && inputName.includes(dataKeys[i].toLowerCase())) {
+					console.log(inputName);
+					console.log(dataKeys[i].toLowerCase());
+					console.log(inputName.includes(dataKeys[i].toLowerCase()));
+					$(this).val(data[dataKeys[i]]["value"]);
+				}
+			}
 		});
 	});
 };
