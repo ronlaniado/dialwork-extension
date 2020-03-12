@@ -6,3 +6,12 @@
 .values {
 	word-wrap: none;
 }
+
+.fa-clipboard {
+	width: 25px;
+	height: 25px;
+}
+
+.copy:hover {
+	fill: coral;
+}
