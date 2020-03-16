@@ -30,8 +30,8 @@ chrome.runtime.onInstalled.addListener(function() {
 			autofill: "custom-question-linkedin-profile"
 		},
 		Website: {
-			value: "https://www.linkedin.com/in/williamhgates/",
-			autofill: "custom-question-webite"
+			value: "https://www.gatesnotes.com/",
+			autofill: "custom-question-website"
 		}
 	};
 	console.log("Background script has been installed successfully.");
