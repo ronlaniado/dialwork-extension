@@ -3,7 +3,7 @@ $(document).ready(() => {
 		file: "contentScript.js"
 	});
 	renderDefaultProfile();
-
+	bindCopy();
 	bindCollectInfo();
 	bindAutofill();
 	bindOpenSettings();
