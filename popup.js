@@ -6,6 +6,7 @@ $(document).ready(() => {
 	bindCopy();
 	bindCollectInfo();
 	bindAutofill();
+	bindOpenSettings();
 });
 
 const renderDefaultProfile = () => {
@@ -84,5 +85,11 @@ const bindAutofill = () => {
 				console.log(response.farewell);
 			});
 		});
+	});
+};
+
+const bindOpenSettings = () => {
+	$("#settingsButton").click(() => {
+		chrome.runtime.openOptionsPage();
 	});
 };
