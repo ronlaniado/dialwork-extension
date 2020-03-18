@@ -4,10 +4,6 @@ if (typeof input === "undefined") {
 	window.input = new Object();
 }
 $(document).ready(() => {
-	addListeners();
-});
-
-const addListeners = () => {
 	chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		if (request.message === "execCollectInfo") {
 			console.log("collecting info!");
@@ -17,7 +13,7 @@ const addListeners = () => {
 			autofill();
 		}
 	});
-};
+});
 
 const getInfo = () => {
 	$("body input[name]").each(function() {
@@ -62,6 +58,7 @@ const autofill = () => {
 		let data = result.formData.defaultProfile;
 		console.log(data);
 		$("input").each(function() {
+			console.log($(this).val());
 			// Get all keys from data
 			// Interate through the indices of the keys
 			// For each index, find the autocomplete key and set its value to $(this).val(autocompleteValue)
@@ -70,6 +67,7 @@ const autofill = () => {
 			for (let i = 0; i < dataKeys.length; i++) {
 				let inputName = $(this).attr("name");
 				if ($(this).attr("autocomplete") === data[dataKeys[i]]["autofill"]) {
+					console.log("I can autofill here!");
 					// Matches autofilling values from data
 					$(this).val(data[dataKeys[i]]["value"]);
 				} else if (typeof inputName !== "undefined" && inputName.includes(dataKeys[i].toLowerCase())) {
@@ -77,6 +75,8 @@ const autofill = () => {
 					console.log(dataKeys[i].toLowerCase());
 					console.log(inputName.includes(dataKeys[i].toLowerCase()));
 					$(this).val(data[dataKeys[i]]["value"]);
+				} else {
+					console.log("couldn't autofill");
 				}
 			}
 		});
