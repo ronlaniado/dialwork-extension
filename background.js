@@ -9,6 +9,10 @@ chrome.runtime.onInstalled.addListener(function() {
 			value: "Gates",
 			autofill: "family-name"
 		},
+		"Full Name": {
+			value: "Bill Gates",
+			autofill: "custom-name"
+		},
 		Email: {
 			value: "bill.gates@microsoft.com",
 			autofill: "email"
@@ -32,6 +36,22 @@ chrome.runtime.onInstalled.addListener(function() {
 		Website: {
 			value: "https://www.gatesnotes.com/",
 			autofill: "custom-question-website"
+		},
+		"Education Start Month": {
+			value: "11",
+			autofill: "custom-education-startdate-month"
+		},
+		"Education Start Year": {
+			value: "1976",
+			autofill: "custom-education-startdate-year"
+		},
+		"Education End Month": {
+			value: "05",
+			autofill: "custom-education-enddate-month"
+		},
+		"Education End Year": {
+			value: "1980",
+			autofill: "custom-education-enddate-year"
 		}
 	};
 	console.log("Background script has been installed successfully.");
