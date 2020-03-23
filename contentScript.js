@@ -15,6 +15,16 @@ $(document).ready(() => {
 	});
 });
 
+$("iframe").ready(function() {
+	// do something once the iframe is loaded
+	console.log("iframe finished loading!");
+	console.log($("#grnhse_iframe").attr("src"));
+	console.log(document.getElementById("grnhse_iframe").contentWindow);
+	$("iframe").each(function() {
+		console.log($(this).contents());
+	});
+});
+
 const getInfo = () => {
 	$("body input[name]").each(function() {
 		if ($(this).val() !== "") {
