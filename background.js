@@ -22,8 +22,8 @@ chrome.runtime.onInstalled.addListener(function() {
 			autofill: "tel"
 		},
 		Location: {
-			value: "Seattle",
-			autofill: ""
+			value: "Seattle, Washington, United States",
+			autofill: "location"
 		},
 		Zip: {
 			value: "11581",
@@ -52,6 +52,10 @@ chrome.runtime.onInstalled.addListener(function() {
 		"Education End Year": {
 			value: "1980",
 			autofill: "custom-education-enddate-year"
+		},
+		"How did you hear about this job?": {
+			value: "Through rigious job hunting.",
+			autofill: "custom-question-how-did-you-hear-about-this-job"
 		}
 	};
 	console.log("Background script has been installed successfully.");
