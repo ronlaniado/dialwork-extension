@@ -4,6 +4,7 @@ if (typeof input === "undefined") {
 	window.input = new Object();
 }
 $(document).ready(() => {
+	addAutofills();
 	chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		if (request.message === "execCollectInfo") {
 			console.log("collecting info!");
@@ -85,10 +86,24 @@ const autofill = () => {
 					console.log(dataKeys[i].toLowerCase());
 					console.log(inputName.includes(dataKeys[i].toLowerCase()));
 					$(this).val(data[dataKeys[i]]["value"]);
+				} else if ($(this).attr("")) {
 				} else {
 					console.log("couldn't autofill");
 				}
 			}
 		});
 	});
+};
+
+const addAutofills = () => {
+	// Will look for specific domain names, and add autofill tags proactively
+	switch (window.location.hostname) {
+		case "boards.greenhouse.io":
+			console.log("url has matched!");
+			$("input[name='job_application[location]']").attr("autocomplete", "location");
+			$("input[name='job_application[educations][][start_date][month]']").attr("autocomplete", "custom-education-startdate-month");
+			$("input[name='job_application[educations][][start_date][year]']").attr("autocomplete", "custom-education-startdate-year");
+			$("input[name='job_application[educations][][end_date][month]']").attr("autocomplete", "custom-education-enddate-month");
+			$("input[name='job_application[educations][][end_date][year]'").attr("autocomplete", "custom-education-enddate-year");
+	}
 };
