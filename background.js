@@ -37,6 +37,30 @@ chrome.runtime.onInstalled.addListener(function() {
 			value: "https://www.gatesnotes.com/",
 			autofill: "custom-question-website"
 		},
+		Facebook: {
+			value: "https://www.facebook.com/BillGates/",
+			autofill: "custom-question-facebook-profile"
+		},
+		Instagram: {
+			value: "https://www.instagram.com/thisisbillgates/",
+			autofill: "custom-question-instagram-profile"
+		},
+		Twitter: {
+			value: "@BillGates",
+			autofill: "custom-question-twitter-username"
+		},
+		Youtube: {
+			value: "https://www.youtube.com/channel/UCnEiGCE13SUI7ZvojTAVBKw",
+			autofill: "custom-question-youtube-channel"
+		},
+		"Education School Name": {
+			value: "Harvard University",
+			autofill: "custom-education-school-name"
+		},
+		"Education Degree": {
+			value: "Mathematics",
+			autofill: "custom-education-degree"
+		},
 		"Education Start Month": {
 			value: "11",
 			autofill: "custom-education-startdate-month"
@@ -56,6 +80,26 @@ chrome.runtime.onInstalled.addListener(function() {
 		"How did you hear about this job?": {
 			value: "Through rigious job hunting.",
 			autofill: "custom-question-how-did-you-hear-about-this-job"
+		},
+		"Certification 1": {
+			value: "Microsoft Certified: Azure Administrator Associate",
+			autofill: "custom-certification-1"
+		},
+		"Certification 2": {
+			value: "Microsoft 365 Certified: Enterprise Administrator Expert",
+			autofill: "custom-certification-2"
+		},
+		"What email program do you use?": {
+			value: "Microsoft Outlook",
+			autofill: "custom-email-program"
+		},
+		"What instant messaging do you use?": {
+			value: "WhatsApp",
+			autofill: "custom-instant-messenger"
+		},
+		"What browser do you use?": {
+			value: "Chrome Version 80",
+			autofill: "custom-browser"
 		}
 	};
 	console.log("Background script has been installed successfully.");
