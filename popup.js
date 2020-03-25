@@ -2,7 +2,6 @@ $(document).ready(() => {
 	chrome.tabs.executeScript({
 		file: "contentScript.js"
 	});
-	renderDefaultProfile();
 	bindCollectInfo();
 	bindAutofill();
 	bindOpenSettings();
