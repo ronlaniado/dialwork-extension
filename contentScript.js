@@ -14,6 +14,7 @@ $(document).ready(() => {
 			autofill();
 		}
 	});
+	$("body").append("<div id='dialog-boxes' style='display:flex;flex-direction:column;bottom:0;right:0;position:fixed'></div>");
 });
 
 const getInfo = () => {
@@ -92,88 +93,100 @@ const autofill = () => {
 // if there's a value, show dialog suggesting the user to add it as an autofill
 
 const suggestAddAutofill = () => {
-	$("input, textarea").click(function() {
+	$("input, textarea").on("click", function() {
 		if ($(this).val() === "") {
+			console.log($(this));
 			console.log("detected an empty input");
-			$(this).blur(function() {
+			$(this).one("blur", function() {
 				if ($(this).val() != "") {
 					console.log("detected a change in empty input!");
-					displayAddAutofill();
+					displayAddAutofill($(this).val(), $(this).attr("name"));
+					$(this).off("click", "blur");
 				}
 			});
 		}
 	});
 };
 
-const displayAddAutofill = () => {
-	const dialogbox = `
-		<div style="position: fixed;
-    				bottom: 0;
-					right: 0;
-					background: white;
-					width: 300px;
-					padding: 8px;
-					margin-bottom: 15px;
-					margin-right: 15px;
-					border-radius: 5px;
-					border: 2px solid #e6e6e6;
+const displayAddAutofill = (value, inputName) => {
+	const dialogBox = `
+		<div style="position:relative;background:white;width:300px;padding:8px;margin-bottom:15px;margin-right:15px;border-radius:5px;border:2px solid #e6e6e6;
 				">
 			<p>I have detected that you manually typed an input I have not recognized, would you like to add this to your collection of autofills?</p>
-			<div style="
-				display: flex;
-				flex-direction: row;
-				justify-content: space-evenly;
-				
-			">
-			<button id="dismiss-button">Dismiss</button>
-			<button>Add</button>
+			<div style="display:flex;flex-direction:column;justify-content:center">
+				<input class="dialogTitle" placeholder="Title" style="border-color:#cccccc; border-style:solid; font-size:12px; border-radius:3px; padding:3px; border-width:1px;">
+				<input value=${value} style="border-color:#cccccc; border-style:solid; font-size:12px; border-radius:3px; padding:3px; border-width:1px;">
+			<div>
+			<div style="display: flex;flex-direction: row;justify-content: space-evenly;margin-top:5px">
+				<button class="dismiss-button" style="">Dismiss</button>
+				<button class="add-button">Add</button>
 			</div>
 		</div>
 	`;
-	$("body").append(dialogbox);
-	$("#dismiss-button").click(function() {
+	$("#dialog-boxes").append(dialogBox);
+	$(".dismiss-button").click(function() {
 		$(this)
 			.parent()
 			.parent()
+			.parent()
+			.parent()
 			.remove();
+	});
+	$(".add-button").click(function() {
+		let dialogTitle = $(".dialogTitle").val();
+		$(this)
+			.parent()
+			.parent()
+			.parent()
+			.parent()
+			.remove();
+		console.log(inputName);
+		chrome.storage.sync.get("formData", function(result) {
+			console.log(value);
+			let defaultProfile = result.formData.defaultProfile;
+			defaultProfile[dialogTitle] = {};
+			defaultProfile[dialogTitle]["value"] = value;
+			// This id should be changed in the future, but it ok for the proof-of-concept
+			defaultProfile[dialogTitle]["autofill"] = inputName;
+			console.log(defaultProfile);
+			chrome.storage.sync.clear();
+			chrome.storage.sync.set({ formData: { defaultProfile } }, () => {
+				console.log("Form has been successfully saved!");
+			});
+		});
+		// map this to the addAutofills
+		// add this as an autofill in the default profile
 	});
 	console.log("displayed dialog");
 };
 
 const addAutofills = () => {
 	// autumatically looks for specific websites and adds autofills for them to make the extension work really well
-	console.log(window.location.hostname);
 	// Will look for specific domain names, and add autofill tags proactively
-	switch (window.location.hostname) {
-		case "boards.greenhouse.io":
-			$("input[name='job_application[location]']").attr("autocomplete", "location");
-			$("input[name='job_application[educations][][start_date][month]']").attr("autocomplete", "custom-education-startdate-month");
-			$("input[name='job_application[educations][][start_date][year]']").attr("autocomplete", "custom-education-startdate-year");
-			$("input[name='job_application[educations][][end_date][month]']").attr("autocomplete", "custom-education-enddate-month");
-			$("input[name='job_application[educations][][end_date][year]'").attr("autocomplete", "custom-education-enddate-year");
-			$("input[name='job_application[educations][][school_name_id]']").attr("autocomplete", "custom-education-school-name");
-			$("a[data-source='paste'][aria-labelledby='resume']")[0].dispatchEvent(new MouseEvent("click"));
-			$(".school-name")[0].dispatchEvent(new MouseEvent("click"));
-		// $("#s2id_education_school_name_0").addClass("select2-dropdown-open");
-		// $("#select2-drop-mask").css("display", "block");
-		// $(".select2-with-searchbox").css("display", "block");
-		// $(".select2-with-searchbox").attr("id", "select2-drop");
-		// $(".select2-input").addClass("select2-focused");
-		case "www.liveworld.com":
-			$("#first_name").attr("autocomplete", "given-name");
-			$("#last_name").attr("autocomplete", "family-name");
-			$("#email_address").attr("autocomplete", "email");
-			$("#phone").attr("autocomplete", "tel");
-			$("[name='facebook']").attr("autocomplete", "custom-question-facebook-profile");
-			$("[name='instagram']").attr("autocomplete", "custom-question-instagram-profile");
-			$("[name='twitter']").attr("autocomplete", "custom-question-instagram-profile");
-			$("[name='education_diploma_obtained']").attr("autocomplete", "custom-education-degree");
-			$("[name='certification_1").attr("autocomplete", "custom-certification-1");
-			$("[name='certification_2").attr("autocomplete", "custom-certification-2");
-			$("#skillset_email_program_used").attr("autocomplete", "custom-email-program");
-			$("#skillset_IM_used").attr("autocomplete", "custom-instant-messenger");
-			$("#skillset_browser_used").attr("autocomplete", "custom-browser");
-			$("input[name='education_school_attended']").attr("autocomplete", "custom-education-school-name");
-			$("#certify")[0].dispatchEvent(new MouseEvent("click"));
-	}
+	chrome.storage.sync.get("supportedSites", function(result) {
+		let currentTab = window.location.hostname;
+		let data = result.supportedSites;
+		let supportedSitesArr = Object.keys(data);
+		let supportedSiteIndex = supportedSitesArr.indexOf(currentTab);
+		if (supportedSiteIndex >= 0) {
+			let siteData = data[currentTab];
+			let siteKeys = Object.keys(siteData);
+			for (let i = 0; i < siteKeys.length; i++) {
+				$(siteData[siteKeys[i]]).attr("autocomplete", siteKeys[i]);
+			}
+			console.log("I have detected that this website is supported by the Stronghire extension, and have created the necessary autofills to run!");
+		}
+	});
 };
+
+/*
+	Greenhouse: 
+	$("a[data-source='paste'][aria-labelledby='resume']")[0].dispatchEvent(new MouseEvent("click"));
+	$(".school-name")[0].dispatchEvent(new MouseEvent("click"));
+	*/
+
+/*
+	Liveworld: 
+	$("input[name='education_school_attended']").attr("autocomplete", "custom-education-school-name");
+	$("#certify")[0].dispatchEvent(new MouseEvent("click"));
+	*/
