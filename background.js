@@ -102,9 +102,37 @@ chrome.runtime.onInstalled.addListener(function() {
 			autofill: "custom-browser"
 		}
 	};
+
+	const supportedSites = {
+		"boards.greenhouse.io": {
+			location: "input[name='job_application[location]']",
+			"custom-education-startdate-month": "input[name='job_application[educations][][start_date][month]']",
+			"custom-education-startdate-year": "input[name='job_application[educations][][start_date][year]']",
+			"custom-education-enddate-month": "input[name='job_application[educations][][end_date][month]']",
+			"custom-education-enddate-year": "input[name='job_application[educations][][end_date][year]']",
+			"input[name='job_application[educations][][school_name_id]']": "custom-education-school-name"
+		},
+		"www.liveworld.com": {
+			"given-name": "#first_name",
+			"family-name": "#last_name",
+			email: "#email_address",
+			tel: "#phone",
+			"custom-question-facebook-profile": "[name='facebook']",
+			"custom-question-instagram-profile": "[name='instagram']",
+			"custom-question-instagram-profile": "[name='twitter']",
+			"custom-education-degree": "[name='education_diploma_obtained']",
+			"custom-certification-1": "[name='certification_1",
+			"custom-certification-2": "[name='certification_2",
+			"custom-email-program": "#skillset_email_program_used",
+			"custom-instant-messenger": "#skillset_IM_used",
+			"custom-browser": "#skillset_browser_used",
+			"custom-education-school-name": "input[name='education_school_attended']"
+		}
+	};
+
 	console.log("Background script has been installed successfully.");
 	chrome.storage.sync.clear();
-	chrome.storage.sync.set({ formData: { defaultProfile } }, () => {
+	chrome.storage.sync.set({ formData: { defaultProfile }, supportedSites }, () => {
 		console.log("Form has been saved to storage");
 	});
 
