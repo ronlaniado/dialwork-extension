@@ -5,6 +5,7 @@ if (typeof input === "undefined") {
 }
 $(document).ready(() => {
 	addAutofills();
+	addInlineAutofills();
 	chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		if (request.message === "execCollectInfo") {
 			console.log("collecting info!");
@@ -142,6 +143,7 @@ const displayAddAutofill = (value, inputName) => {
 			.remove();
 		console.log(inputName);
 		chrome.storage.sync.get("formData", function(result) {
+			// This function needs support to also update the supportedSites json object as well
 			console.log(value);
 			let defaultProfile = result.formData.defaultProfile;
 			defaultProfile[dialogTitle] = {};
@@ -188,5 +190,21 @@ const addAutofills = () => {
 /*
 	Liveworld: 
 	$("input[name='education_school_attended']").attr("autocomplete", "custom-education-school-name");
-	$("#certify")[0].dispatchEvent(new MouseEvent("click"));
+	$("#certify")[0].dispatchEvent(new MouseEvent("click"));4
 	*/
+
+const addInlineAutofills = () => {
+	let imgURL = chrome.runtime.getURL("assets/pen-square-solid.svg").toString();
+	console.log(imgURL);
+	$("body input[type!='hidden']").css({
+		"background-image": `url(https://i.imgur.com/W3PVxtA.png)`,
+		"background-repeat": "no-repeat",
+		"background-size": "16px 18px",
+		"background-attachment": "scroll",
+		"background-position": "96% 50%",
+		"z-index": "10000"
+	});
+	$("body input[type!='hidden']").click(() => {
+		console.log("Stronghire helper clicked!");
+	});
+};
