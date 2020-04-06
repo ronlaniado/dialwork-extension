@@ -145,4 +145,17 @@ chrome.runtime.onInstalled.addListener(function() {
 			sendResponse({ farewell: "goodbye!" });
 		}
 	});
+	renderContextMenus();
 });
+
+const renderContextMenus = () => {
+	chrome.contextMenus.create({
+		title: "Stronghire",
+		id: "Stronghire",
+		contexts: ["editable"]
+	});
+
+	chrome.contextMenus.onClicked.addListener(() => {
+		console.log("The context menu has been pressed!");
+	});
+};
