@@ -28,7 +28,6 @@
         "declarativeContent",
         "storage",
         "tabs",
-        "activeTab",
         "clipboardWrite",
         "clipboardRead"
     ],
