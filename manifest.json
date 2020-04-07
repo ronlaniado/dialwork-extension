@@ -1,7 +1,7 @@
 {
     "name": "Stronghire Application Assistant",
     "version": "0.1",
-    "description": "Chrome extension by dail.work that helps you apply to jobs",
+    "description": "Chrome extension by Stronghire that helps get hired.",
     "manifest_version": 2,
     "background": {
         "scripts": [
