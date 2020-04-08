@@ -5,7 +5,6 @@ if (typeof input === "undefined") {
 }
 $(document).ready(() => {
 	addAutofills();
-	addInlineAutofills();
 	chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		if (request.message === "execCollectInfo") {
 			console.log("collecting info!");
@@ -19,7 +18,7 @@ $(document).ready(() => {
 });
 
 const getInfo = () => {
-	$("body input[name]").each(function() {
+	$("body input[name]").each(function () {
 		if ($(this).val() !== "") {
 			// Stores all non-empty inputs into an object
 			input[$(this).attr("name")] = $(this).val();
@@ -60,7 +59,7 @@ const autofill = () => {
 	chrome.storage.sync.get("formData", (result) => {
 		let data = result.formData.defaultProfile;
 		console.log(data);
-		$("input, textarea").each(function() {
+		$("input, textarea").each(function () {
 			console.log($(this).val());
 			// Get all keys from data
 			// Interate through the indices of the keys
@@ -94,11 +93,11 @@ const autofill = () => {
 // if there's a value, show dialog suggesting the user to add it as an autofill
 
 const suggestAddAutofill = () => {
-	$("input, textarea").on("click", function() {
+	$("input, textarea").on("click", function () {
 		if ($(this).val() === "") {
 			console.log($(this));
 			console.log("detected an empty input");
-			$(this).one("blur", function() {
+			$(this).one("blur", function () {
 				if ($(this).val() != "") {
 					console.log("detected a change in empty input!");
 					displayAddAutofill($(this).val(), $(this).attr("name"));
@@ -125,24 +124,14 @@ const displayAddAutofill = (value, inputName) => {
 		</div>
 	`;
 	$("#dialog-boxes").append(dialogBox);
-	$(".dismiss-button").click(function() {
-		$(this)
-			.parent()
-			.parent()
-			.parent()
-			.parent()
-			.remove();
+	$(".dismiss-button").click(function () {
+		$(this).parent().parent().parent().parent().remove();
 	});
-	$(".add-button").click(function() {
+	$(".add-button").click(function () {
 		let dialogTitle = $(".dialogTitle").val();
-		$(this)
-			.parent()
-			.parent()
-			.parent()
-			.parent()
-			.remove();
+		$(this).parent().parent().parent().parent().remove();
 		console.log(inputName);
-		chrome.storage.sync.get("formData", function(result) {
+		chrome.storage.sync.get("formData", function (result) {
 			// This function needs support to also update the supportedSites json object as well
 			console.log(value);
 			let defaultProfile = result.formData.defaultProfile;
@@ -165,7 +154,7 @@ const displayAddAutofill = (value, inputName) => {
 const addAutofills = () => {
 	// autumatically looks for specific websites and adds autofills for them to make the extension work really well
 	// Will look for specific domain names, and add autofill tags proactively
-	chrome.storage.sync.get("supportedSites", function(result) {
+	chrome.storage.sync.get("supportedSites", function (result) {
 		let currentTab = window.location.hostname;
 		let data = result.supportedSites;
 		let supportedSitesArr = Object.keys(data);
@@ -192,19 +181,3 @@ const addAutofills = () => {
 	$("input[name='education_school_attended']").attr("autocomplete", "custom-education-school-name");
 	$("#certify")[0].dispatchEvent(new MouseEvent("click"));4
 	*/
-
-const addInlineAutofills = () => {
-	let imgURL = chrome.runtime.getURL("assets/pen-square-solid.svg").toString();
-	console.log(imgURL);
-	$("body input[type!='hidden']").css({
-		"background-image": `url(https://i.imgur.com/W3PVxtA.png)`,
-		"background-repeat": "no-repeat",
-		"background-size": "16px 18px",
-		"background-attachment": "scroll",
-		"background-position": "96% 50%",
-		"z-index": "10000"
-	});
-	$("body input[type!='hidden']").click(() => {
-		console.log("Stronghire helper clicked!");
-	});
-};
