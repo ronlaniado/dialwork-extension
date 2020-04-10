@@ -4,13 +4,20 @@ chrome.runtime.onInstalled.addListener(function () {
 			value: "Bill",
 			autofill: "given-name",
 		},
-
+		"Preferred First Name": {
+			value: "Billy",
+			autofill: "preferred-name",
+		},
+		"Middle Name": {
+			value: "Henry",
+			autofill: "additional-name",
+		},
 		"Last Name": {
 			value: "Gates",
 			autofill: "family-name",
 		},
 		"Full Name": {
-			value: "Bill Gates",
+			value: "Bill Henry Gates",
 			autofill: "custom-name",
 		},
 		Email: {
@@ -25,9 +32,25 @@ chrome.runtime.onInstalled.addListener(function () {
 			value: "Seattle, Washington, United States",
 			autofill: "location",
 		},
+		"Street Address": {
+			value: "1835 73rd Ave NE and 7400 Northeast 18th Street",
+			autofill: "street-address",
+		},
+		City: {
+			value: "Seattle",
+			autofill: "locality",
+		},
+		"Full Address": {
+			value: "1835 73rd Ave NE (service entrance) and 7400 Northeast 18th Street (main entrance), Medina, Washington, 98101",
+			autofill: "custom-full-address",
+		},
 		Zip: {
-			value: "11581",
+			value: "98101",
 			autofill: "postal-code",
+		},
+		"Cover Letter": {
+			value: "Hello. I'd like 1 job, please",
+			autofill: "custom-cover-letter",
 		},
 		LinkedIn: {
 			value: "https://www.linkedin.com/in/williamhgates/",
@@ -101,6 +124,10 @@ chrome.runtime.onInstalled.addListener(function () {
 			value: "Chrome Version 80",
 			autofill: "custom-browser",
 		},
+		"Desired Salary Range": {
+			value: "$50-80 Billion",
+			autofill: "custom-salary-range",
+		},
 	};
 
 	const supportedSites = {
@@ -111,6 +138,7 @@ chrome.runtime.onInstalled.addListener(function () {
 			"custom-education-enddate-month": "input[name='job_application[educations][][end_date][month]']",
 			"custom-education-enddate-year": "input[name='job_application[educations][][end_date][year]']",
 			"input[name='job_application[educations][][school_name_id]']": "custom-education-school-name",
+			"custom-salary-range": "[autocomplete='custom-question-were-all-about-transparency-and-we-want-this-to-be-an-exciting-next-step-this-is-an-ongoing-conversation-but-to-make-sure-were-aligned-what-is-your-desired-base-salary-range']",
 		},
 		"www.liveworld.com": {
 			"given-name": "#first_name",
@@ -128,8 +156,34 @@ chrome.runtime.onInstalled.addListener(function () {
 			"custom-browser": "#skillset_browser_used",
 			"custom-education-school-name": "input[name='education_school_attended']",
 		},
+		"apply.workable.com": {
+			"given-name": "#firstname",
+			"family-name": "#lastname",
+			email: "#email",
+			tel: "[name='phone']",
+			"custom-cover-letter": "#cover_letter",
+			"custom-name": "#QA_1858145",
+		},
+		"hire.withgoogle.com": {
+			"given-name": "#input_firstName",
+			"family-name": "#input_lastName",
+			email: "[name='email']",
+			tel: "[name='phoneNumber']",
+			"custom-full-address": "[name='P_AAAAAAEAAHqGTnrCb47QMz']",
+		},
+		"recruiting.adp.com": {
+			email: "[name='emailAddress']",
+			"given-name": "[name='firstName']",
+			"preferred-name": "[name='$$preferredName']",
+			"additional-name": "[name='middleName']",
+			"family-name": "[name='lastName']",
+			tel: "[name='phone']",
+			"street-address": "[name='address1']",
+			locality: "[name='city']",
+			"postal-code": "[name='zip']",
+		},
 	};
-
+	console.log(supportedSites);
 	console.log("Background script has been installed successfully.");
 	chrome.storage.sync.clear();
 	chrome.storage.sync.set({ formData: { defaultProfile }, supportedSites }, () => {
