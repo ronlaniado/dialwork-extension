@@ -25,6 +25,7 @@ const getInfo = () => {
 		}
 	});
 	let currentUrl = window.location.href;
+	console.log(currentUrl);
 	// current url of page will be used as the key for data object
 
 	// I want to get an object of all the Urls, and then push the new url to the object, and then set the object once again
@@ -60,7 +61,6 @@ const autofill = () => {
 		let data = result.formData.defaultProfile;
 		console.log(data);
 		$("input, textarea").each(function () {
-			console.log($(this).val());
 			// Get all keys from data
 			// Interate through the indices of the keys
 			// For each index, find the autocomplete key and set its value to $(this).val(autocompleteValue)
@@ -69,18 +69,13 @@ const autofill = () => {
 			for (let i = 0; i < dataKeys.length; i++) {
 				let inputName = $(this).attr("name");
 				if ($(this).attr("autocomplete") === data[dataKeys[i]]["autofill"]) {
-					console.log("I can autofill here!" + "I am " + inputName);
 					// Matches autofilling values from data
 					$(this).val(data[dataKeys[i]]["value"]);
 				} else if (typeof inputName !== "undefined" && inputName.includes(dataKeys[i].toLowerCase())) {
-					console.log(inputName);
-					console.log(dataKeys[i].toLowerCase());
-					console.log(inputName.includes(dataKeys[i].toLowerCase()));
 					// Temporarily commented out line underneath, until it is made into a suggestion
 					// $(this).val(data[dataKeys[i]]["value"]);
 				} else if ($(this).attr("")) {
 				} else {
-					console.log("couldn't autofill");
 				}
 			}
 		});
@@ -109,6 +104,7 @@ const suggestAddAutofill = () => {
 };
 
 const displayAddAutofill = (value, inputName) => {
+	// Displayed when the users inputs something into a field that is not recognized by the extension
 	const dialogBox = `
 		<div style="position:relative;background:white;width:300px;padding:8px;margin-bottom:15px;margin-right:15px;border-radius:5px;border:2px solid #e6e6e6;
 				">
@@ -131,17 +127,20 @@ const displayAddAutofill = (value, inputName) => {
 		let dialogTitle = $(".dialogTitle").val();
 		$(this).parent().parent().parent().parent().remove();
 		console.log(inputName);
-		chrome.storage.sync.get("formData", function (result) {
+		chrome.storage.sync.get(["formData", "supportedSites"], function (result) {
 			// This function needs support to also update the supportedSites json object as well
 			console.log(value);
 			let defaultProfile = result.formData.defaultProfile;
+			let supportedSites = result.supportedSites;
+			console.log(supportedSites);
+			supportedSites[window.location.hostname][inputName] = `[name='${inputName}']`;
+			console.log(defaultProfile);
 			defaultProfile[dialogTitle] = {};
 			defaultProfile[dialogTitle]["value"] = value;
 			// This id should be changed in the future, but it ok for the proof-of-concept
 			defaultProfile[dialogTitle]["autofill"] = inputName;
 			console.log(defaultProfile);
-			chrome.storage.sync.clear();
-			chrome.storage.sync.set({ formData: { defaultProfile } }, () => {
+			chrome.storage.sync.set({ formData: { defaultProfile }, supportedSites }, () => {
 				console.log("Form has been successfully saved!");
 			});
 		});
@@ -157,13 +156,16 @@ const addAutofills = () => {
 	chrome.storage.sync.get("supportedSites", function (result) {
 		let currentTab = window.location.hostname;
 		let data = result.supportedSites;
+		console.log(result.supportedSites);
 		let supportedSitesArr = Object.keys(data);
+		console.log(supportedSitesArr);
 		let supportedSiteIndex = supportedSitesArr.indexOf(currentTab);
 		if (supportedSiteIndex >= 0) {
 			let siteData = data[currentTab];
 			let siteKeys = Object.keys(siteData);
 			for (let i = 0; i < siteKeys.length; i++) {
 				$(siteData[siteKeys[i]]).attr("autocomplete", siteKeys[i]);
+				console.log(siteData[siteKeys[i]] + ":" + siteKeys[i]);
 			}
 			console.log("I have detected that this website is supported by the Stronghire extension, and have created the necessary autofills to run!");
 		}
