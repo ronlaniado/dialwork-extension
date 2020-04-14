@@ -1,23 +1,22 @@
-if (typeof input === "undefined") {
-	// Assigning to window.input creates the global
-	window.keys = new Array();
-	window.input = new Object();
-}
 $(document).ready(() => {
 	addAutofills();
 	chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		if (request.message === "execCollectInfo") {
-			console.log("collecting info!");
-			getInfo();
+			collectInfo();
 		} else if (request.message === "execAutofill") {
-			console.log("Autofilling the forms on this page!");
 			autofill();
 		}
 	});
 	$("body").append("<div id='dialog-boxes' style='display:flex;flex-direction:column;bottom:0;right:0;position:fixed'></div>");
 });
 
-const getInfo = () => {
+if (typeof input === "undefined") {
+	// Assigning to window.input creates the global
+	window.keys = new Array();
+	window.input = new Object();
+}
+
+function collectInfo() {
 	$("body input[name]").each(function () {
 		if ($(this).val() !== "") {
 			// Stores all non-empty inputs into an object
@@ -25,41 +24,26 @@ const getInfo = () => {
 		}
 	});
 	let currentUrl = window.location.href;
-	console.log(currentUrl);
-	// current url of page will be used as the key for data object
-
-	// I want to get an object of all the Urls, and then push the new url to the object, and then set the object once again
-	chrome.storage.sync.set({ [currentUrl]: input }, () => {
-		console.log("Form has been saved to storage");
-	});
+	chrome.storage.sync.set({ [currentUrl]: input });
 	keys.push(currentUrl);
-	console.log(input);
-
 	// Now I need to have a message be sent to the background page, which will manage all the keys I need
-	chrome.runtime.sendMessage({ message: keys }, (response) => {
-		console.log(response.farewell);
-	});
+	chrome.runtime.sendMessage({ message: keys });
 	updateInfo(keys, input);
-};
+}
 
-const updateInfo = (keys, values) => {
+function updateInfo(keys, values) {
 	chrome.storage.sync.get("formData", (result) => {
-		console.log(result.formData);
 		let chromeData = result.formData;
 		chromeData[keys] = values;
 		chrome.storage.sync.set({ formData: chromeData }, () => {
-			console.log("Form saved to storage!");
-			chrome.storage.sync.get("formData", (result) => {
-				console.log(result.formData);
-			});
+			chrome.storage.sync.get("formData", (result) => {});
 		});
 	});
-};
+}
 
-const autofill = () => {
+function autofill() {
 	chrome.storage.sync.get("formData", (result) => {
 		let data = result.formData.defaultProfile;
-		console.log(data);
 		$("input, textarea").each(function () {
 			// Get all keys from data
 			// Interate through the indices of the keys
@@ -81,37 +65,34 @@ const autofill = () => {
 		});
 	});
 	suggestAddAutofill();
-};
+}
 
 // Listen if the user clicks on an input that is EMPTY
 // Once the user clicks out of it, check if the input now has a value
 // if there's a value, show dialog suggesting the user to add it as an autofill
 
-const suggestAddAutofill = () => {
+function suggestAddAutofill() {
 	$("input, textarea").on("click", function () {
 		if ($(this).val() === "") {
-			console.log($(this));
-			console.log("detected an empty input");
 			$(this).one("blur", function () {
 				if ($(this).val() != "") {
-					console.log("detected a change in empty input!");
 					displayAddAutofill($(this).val(), $(this).attr("name"));
 					$(this).off("click", "blur");
 				}
 			});
 		}
 	});
-};
+}
 
-const displayAddAutofill = (value, inputName) => {
+function displayAddAutofill(inputValue, inputName) {
 	// Displayed when the users inputs something into a field that is not recognized by the extension
 	const dialogBox = `
 		<div style="position:relative;background:white;width:300px;padding:8px;margin-bottom:15px;margin-right:15px;border-radius:5px;border:2px solid #e6e6e6;
 				">
 			<p>I have detected that you manually typed an input I have not recognized, would you like to add this to your collection of autofills?</p>
 			<div style="display:flex;flex-direction:column;justify-content:center">
-				<input class="dialogTitle" placeholder="Title" style="border-color:#cccccc; border-style:solid; font-size:12px; border-radius:3px; padding:3px; border-width:1px;">
-				<input value=${value} style="border-color:#cccccc; border-style:solid; font-size:12px; border-radius:3px; padding:3px; border-width:1px;">
+				<input class="dialogTitle" placeholder="Title" style="border-color:#cccccc; border-style:solid; font-size:12px; border-radius:3px; padding:3px; margin:3px; border-width:1px;">
+				<input class="dialogValue" placeholder="Value" value="${inputValue}" style="border-color:#cccccc; border-style:solid; font-size:12px; border-radius:3px; padding:3px; margin: 3px; border-width:1px;">
 			<div>
 			<div style="display: flex;flex-direction: row;justify-content: space-evenly;margin-top:5px">
 				<button class="dismiss-button" style="">Dismiss</button>
@@ -126,51 +107,39 @@ const displayAddAutofill = (value, inputName) => {
 	$(".add-button").click(function () {
 		let dialogTitle = $(".dialogTitle").val();
 		$(this).parent().parent().parent().parent().remove();
-		console.log(inputName);
 		chrome.storage.sync.get(["formData", "supportedSites"], function (result) {
 			// This function needs support to also update the supportedSites json object as well
-			console.log(value);
 			let defaultProfile = result.formData.defaultProfile;
 			let supportedSites = result.supportedSites;
-			console.log(supportedSites);
 			supportedSites[window.location.hostname][inputName] = `[name='${inputName}']`;
-			console.log(defaultProfile);
 			defaultProfile[dialogTitle] = {};
-			defaultProfile[dialogTitle]["value"] = value;
+			defaultProfile[dialogTitle]["value"] = inputValue;
 			// This id should be changed in the future, but it ok for the proof-of-concept
 			defaultProfile[dialogTitle]["autofill"] = inputName;
-			console.log(defaultProfile);
-			chrome.storage.sync.set({ formData: { defaultProfile }, supportedSites }, () => {
-				console.log("Form has been successfully saved!");
-			});
+			chrome.storage.sync.set({ formData: { defaultProfile }, supportedSites });
 		});
 		// map this to the addAutofills
 		// add this as an autofill in the default profile
 	});
-	console.log("displayed dialog");
-};
+}
 
-const addAutofills = () => {
+function addAutofills() {
 	// autumatically looks for specific websites and adds autofills for them to make the extension work really well
 	// Will look for specific domain names, and add autofill tags proactively
 	chrome.storage.sync.get("supportedSites", function (result) {
 		let currentTab = window.location.hostname;
 		let data = result.supportedSites;
-		console.log(result.supportedSites);
 		let supportedSitesArr = Object.keys(data);
-		console.log(supportedSitesArr);
 		let supportedSiteIndex = supportedSitesArr.indexOf(currentTab);
 		if (supportedSiteIndex >= 0) {
 			let siteData = data[currentTab];
 			let siteKeys = Object.keys(siteData);
 			for (let i = 0; i < siteKeys.length; i++) {
 				$(siteData[siteKeys[i]]).attr("autocomplete", siteKeys[i]);
-				console.log(siteData[siteKeys[i]] + ":" + siteKeys[i]);
 			}
-			console.log("I have detected that this website is supported by the Stronghire extension, and have created the necessary autofills to run!");
 		}
 	});
-};
+}
 
 /*
 	Greenhouse: 
