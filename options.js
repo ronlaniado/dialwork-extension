@@ -4,23 +4,20 @@ $(document).ready(() => {
 
 const getData = () => {
 	chrome.storage.sync.get("formData", (result) => {
-		console.log(result.formData);
 		renderData(result.formData);
 	});
 };
 
 const renderData = (result) => {
 	console.log(result);
-	let title = "";
-	let rows = "";
+	let title, rows;
 	for (const url in result) {
 		title = `<h5 class='text-white text-center' id="${result[url]}">My profile</h5>`;
 		rows = "";
 		for (const value in result[url]) {
-			console.log(result[url]);
-			console.log(value);
+			console.log(result[url][value]["autofill"]);
 			rows += `<div class='input-group input-group-sm d-flex flex-row my-2' id="${value}">
-					<input type='text' class='form-control font-weight-bold input-left key' value="${value}" />
+					<input type='text' class='form-control font-weight-bold input-left key' value="${value}" disabled="true" autofill="${result[url][value]["autofill"]}"/>
 					<input type='text' class='form-control input-right value' value="${result[url][value]["value"]}"/ aria-describedby='cancel' />
 					<div class='input-group-append cancel-button'>
 						<span class='input-group-text' id='cancel'>X</span>
@@ -47,39 +44,24 @@ const bindCancel = () => {
 
 const bindSaveButton = () => {
 	$(".save-button").click((e) => {
-		let dataString = "";
+		let dataString;
 		let data = {};
-		let url = "";
-		console.log("button clicked!");
-		let parentId = e.target.parentNode.id;
-		console.log(parentId);
-		$("#" + $.escapeSelector(parentId)).each(() => {
+		let url = e.target.parentNode.id;
+
+		$("#" + $.escapeSelector(url)).each(() => {
 			dataString;
-			url = parentId;
-			console.log(url);
 			data = {};
 			$(".input-group").each((i, val) => {
-				console.log(i);
 				let key = $(val).find("input:nth-child(1)").val();
 				let value = $(val).find("input:nth-child(2)").val();
-				data[key] = value;
+				let autofill = $(val).find("input:nth-child(1)").attr("autofill");
+				console.log(autofill);
+				data[key] = {};
+				data[key]["value"] = value;
+				data[key]["autofill"] = autofill;
 			});
 		});
-		console.log(data);
-		// update new object in using chrome's storage api
-		chrome.storage.sync.get("formData", (result) => {
-			let chromeData = result.formData;
-			chromeData[url] = data;
-			console.log(chromeData);
-
-			chrome.storage.sync.set({ formData: chromeData }, () => {
-				console.log("Form saved to storage!");
-				chrome.storage.sync.get("formData", (result) => {
-					let localData = result.formData;
-					console.log("New data from chrome is: " + localData);
-				});
-			});
-		});
+		chrome.storage.sync.set({ formData: { defaultProfile: data } });
 	});
 };
 
@@ -88,7 +70,3 @@ const bindInputChange = () => {
 		$(".save-button").css("display", "block");
 	});
 };
-
-const selectorOptions = `
-<option></option>
-`;
