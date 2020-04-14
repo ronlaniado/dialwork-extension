@@ -14,7 +14,7 @@ const renderData = (result) => {
 	let title = "";
 	let rows = "";
 	for (const url in result) {
-		title = `<h5 class='text-white text-center' id="${result[url]}">url</h5>`;
+		title = `<h5 class='text-white text-center' id="${result[url]}">My profile</h5>`;
 		rows = "";
 		for (const value in result[url]) {
 			console.log(result[url]);
@@ -27,17 +27,8 @@ const renderData = (result) => {
 					</div>
 				</div>`;
 		}
-		const saveButton =
-			"<button class='btn btn-warning center save-button' type='button' style='display:none'>Save changes</button>";
-		$(".container").append(
-			`<div class='bg-info rounded-sm py-5 px-3 m-2 data-container' id="${url}">` +
-				title +
-				"<div>" +
-				rows +
-				"</div>" +
-				saveButton +
-				"</div></div>"
-		);
+		const saveButton = "<button class='btn btn-warning center save-button' type='button' style='display:none'>Save changes</button>";
+		$(".container").append(`<div class='bg-info rounded-sm py-5 px-3 m-2 data-container' id="${url}">` + title + "<div>" + rows + "</div>" + saveButton + "</div></div>");
 	}
 	bindCancel();
 	bindSaveButton();
@@ -69,12 +60,8 @@ const bindSaveButton = () => {
 			data = {};
 			$(".input-group").each((i, val) => {
 				console.log(i);
-				let key = $(val)
-					.find("input:nth-child(1)")
-					.val();
-				let value = $(val)
-					.find("input:nth-child(2)")
-					.val();
+				let key = $(val).find("input:nth-child(1)").val();
+				let value = $(val).find("input:nth-child(2)").val();
 				data[key] = value;
 			});
 		});
