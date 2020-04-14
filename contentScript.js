@@ -124,8 +124,7 @@ function displayAddAutofill(inputValue, inputName) {
 }
 
 function addAutofills() {
-	// autumatically looks for specific websites and adds autofills for them to make the extension work really well
-	// Will look for specific domain names, and add autofill tags proactively
+	// Autumatically looks for specific websites and adds autofills for them to make the extension work really well
 	chrome.storage.sync.get("supportedSites", function (result) {
 		let currentTab = window.location.hostname;
 		let data = result.supportedSites;
