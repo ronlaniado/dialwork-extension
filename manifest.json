@@ -1,6 +1,6 @@
 {
     "name": "Stronghire Application Assistant",
-    "version": "0.3",
+    "version": "0.4",
     "description": "Chrome extension by Stronghire that helps get hired.",
     "manifest_version": 2,
     "background": {
