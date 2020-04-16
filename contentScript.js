@@ -1,4 +1,5 @@
 $(document).ready(() => {
+	addInlineAutofills();
 	addAutofills();
 	chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		if (request.message === "execCollectInfo") {
@@ -138,16 +139,44 @@ function addAutofills() {
 			}
 		}
 	});
-}
-
-/*
+	/*
 	Greenhouse: 
 	$("a[data-source='paste'][aria-labelledby='resume']")[0].dispatchEvent(new MouseEvent("click"));
 	$(".school-name")[0].dispatchEvent(new MouseEvent("click"));
-	*/
-
-/*
 	Liveworld: 
 	$("input[name='education_school_attended']").attr("autocomplete", "custom-education-school-name");
 	$("#certify")[0].dispatchEvent(new MouseEvent("click"));4
 	*/
+}
+
+// function addInlineAutofills() {
+// 	let imgURL = chrome.runtime.getURL("assets/just_logo48.png");
+// 	console.log(imgURL);
+// 	$("body input[type!='hidden']").css({
+// 		"background-image": `url("${imgURL}")`,
+// 		"background-repeat": "no-repeat",
+// 		"background-size": "16px 18px",
+// 		"padding-right": "6%",
+// 		"background-position": "right center",
+// 		//	"background-position": "96% 50%",
+// 		"z-index": "1000",
+// 	});
+// 	$("body input[type!='hidden']").click(function (e) {
+// 		// The event listener for when the Stronghire dropdown is clicked
+// 		let mousePosInElement = e.pageX - $(this).offset().left;
+// 		if (mousePosInElement > $(this).width()) {
+// 			console.log("button clicked!");
+// 		}
+// 	});
+// 	// $("body input[type!='hidden']").hover(function (e) {
+// 	// 	// Changes the cursor to a pointer on hover
+// 	// 	let mousePosInElement = e.pageX - $(this).offset().left;
+// 	// 	console.log(mousePosInElement);
+// 	// 	console.log($(this).width());
+// 	// 	if (mousePosInElement > $(this).width()) {
+// 	// 		$(this).css({ cursor: "pointer" });
+// 	// 	} else {
+// 	// 		$(this).css({ cursor: "text" });
+// 	// 	}
+// 	// });
+// }
