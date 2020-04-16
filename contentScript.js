@@ -1,5 +1,5 @@
 $(document).ready(() => {
-	addInlineAutofills();
+	//addInlineAutofills();
 	addAutofills();
 	chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		if (request.message === "execCollectInfo") {
