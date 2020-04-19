@@ -77,7 +77,18 @@ function suggestAddAutofill() {
 		if ($(this).val() === "") {
 			$(this).one("blur", function () {
 				if ($(this).val() != "") {
-					displayAddAutofill($(this).val(), $(this).attr("name"));
+					let inputTitle;
+					if ($(this).attr("label")) {
+						console.log($(this).attr("label"));
+						inputTitle = $(this).attr("label");
+					} else if ($(this).attr("id")) {
+						inputTitle = $(this).attr("id");
+					} else if ($(this).attr("name")) {
+						inputTitle = $(this).attr("name");
+					} else {
+						inputTitle = "Title";
+					}
+					displayAddAutofill($(this).val(), $(this).attr("name"), inputTitle);
 					$(this).off("click", "blur");
 				}
 			});
@@ -85,19 +96,24 @@ function suggestAddAutofill() {
 	});
 }
 
-function displayAddAutofill(inputValue, inputName) {
+function displayAddAutofill(inputValue, inputName, inputTitle) {
+	let imgURL = chrome.runtime.getURL("assets/just_logo48.png");
 	// Displayed when the users inputs something into a field that is not recognized by the extension
 	const dialogBox = `
-		<div style="position:relative;background:white;width:300px;padding:8px;margin-bottom:15px;margin-right:15px;border-radius:5px;border:2px solid #e6e6e6;
+		<div style="position:relative;background:white;width:250px;padding:8px;margin-bottom:15px;margin-right:15px;border-radius:5px;border:2px solid #e6e6e6;
 				">
-			<p>I have detected that you manually typed an input I have not recognized, would you like to add this to your collection of autofills?</p>
+			<div style="display:flex;flex-direction:row;justify-content:flex-start;align-items:center;">
+				<img src="${imgURL}" alt="Stronghire logo" style="height:40px;width:37px;"/>
+				<p style="margin-left:15px;font-size:18px;">Stronghire Assistant</p>
+			</div>
+			<p style="font-weight:600">Add detected input?</p>
 			<div style="display:flex;flex-direction:column;justify-content:center">
-				<input class="dialogTitle" placeholder="Title" style="border-color:#cccccc; border-style:solid; font-size:12px; border-radius:3px; padding:3px; margin:3px; border-width:1px;">
-				<input class="dialogValue" placeholder="Value" value="${inputValue}" style="border-color:#cccccc; border-style:solid; font-size:12px; border-radius:3px; padding:3px; margin: 3px; border-width:1px;">
+				<input class="dialogTitle" placeholder="Suggested title: ${inputTitle}" style="border-color:#cccccc; border-style:solid; font-size:12px; border-radius:3px; padding:3px; margin:5px; border-width:1px;">
+				<input class="dialogValue" placeholder="Value" value="${inputValue}" style="border-color:#cccccc; border-style:solid; font-size:12px; border-radius:3px; padding:3px; margin:5px; border-width:1px;">
 			<div>
 			<div style="display: flex;flex-direction: row;justify-content: space-evenly;margin-top:5px">
 				<button class="dismiss-button" style="">Dismiss</button>
-				<button class="add-button">Add</button>
+				<button class="add-button" style="">Add</button>
 			</div>
 		</div>
 	`;
@@ -107,6 +123,7 @@ function displayAddAutofill(inputValue, inputName) {
 	});
 	$(".add-button").click(function () {
 		let dialogTitle = $(".dialogTitle").val();
+		console.log(dialogTitle);
 		$(this).parent().parent().parent().parent().remove();
 		chrome.storage.sync.get(["formData", "supportedSites"], function (result) {
 			// This function needs support to also update the supportedSites json object as well
@@ -156,14 +173,15 @@ function addAutofills() {
 // 		"background-image": `url("${imgURL}")`,
 // 		"background-repeat": "no-repeat",
 // 		"background-size": "16px 18px",
-// 		"padding-right": "6%",
-// 		"background-position": "right center",
-// 		//	"background-position": "96% 50%",
+// 		"padding-right": "3%",
+// 		"background-position": "96% 50%",
 // 		"z-index": "1000",
 // 	});
 // 	$("body input[type!='hidden']").click(function (e) {
 // 		// The event listener for when the Stronghire dropdown is clicked
 // 		let mousePosInElement = e.pageX - $(this).offset().left;
+// 		console.log(mousePosInElement);
+// 		console.log($(this).width());
 // 		if (mousePosInElement > $(this).width()) {
 // 			console.log("button clicked!");
 // 		}
