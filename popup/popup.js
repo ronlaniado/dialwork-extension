@@ -1,6 +1,6 @@
 $(document).ready(() => {
 	chrome.tabs.executeScript({
-		file: "contentScript.js"
+		file: "scripts/contentScript.js",
 	});
 	bindCollectInfo();
 	bindAutofill();
@@ -52,8 +52,8 @@ const bindCollectInfo = () => {
 	$("#collectButton").on("click", () => {
 		console.log("CLICKED");
 		// Send a message to the content script to begin collecting info
-		chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-			chrome.tabs.sendMessage(tabs[0].id, { message: "execCollectInfo" }, function(response) {
+		chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+			chrome.tabs.sendMessage(tabs[0].id, { message: "execCollectInfo" }, function (response) {
 				console.log(response.farewell);
 			});
 		});
@@ -80,8 +80,8 @@ const bindCopy = () => {
 
 const bindAutofill = () => {
 	$("#autofillButton").click(() => {
-		chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-			chrome.tabs.sendMessage(tabs[0].id, { message: "execAutofill" }, function(response) {
+		chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+			chrome.tabs.sendMessage(tabs[0].id, { message: "execAutofill" }, function (response) {
 				console.log(response.farewell);
 			});
 		});
