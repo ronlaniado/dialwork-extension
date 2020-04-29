@@ -1,7 +1,7 @@
 $(document).ready(() => {
 	//addInlineAutofills();
-	addAutofills();
-	saveSite();
+	verifyAutofillSupport(window.location.hostname);
+	saveSite(window.location.href);
 	chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		if (request.message === "execCollectInfo") {
 			collectInfo();
@@ -11,6 +11,19 @@ $(document).ready(() => {
 	});
 	$("body").append("<div id='dialog-boxes' style='display:flex;flex-direction:column;bottom:0;right:0;position:fixed'></div>");
 });
+
+function verifyAutofillSupport(url) {
+	chrome.storage.sync.get("unsupportedSites", function (result) {
+		let sites = result.unsupportedSites;
+		console.log(sites);
+		console.log(url);
+		if (sites.includes(url)) {
+			alert("This website does not support Stronghire Autofilling at this current time.");
+		} else {
+			addAutofills();
+		}
+	});
+}
 
 if (typeof input === "undefined") {
 	// Assigning to window.input creates the global
@@ -151,6 +164,18 @@ function addAutofills() {
 			for (let i = 0; i < siteKeys.length; i++) {
 				$(siteData[siteKeys[i]]).attr("autocomplete", siteKeys[i]);
 			}
+		}
+	});
+}
+
+function saveSite(url) {
+	// Saves the current website to be shared with server in order to recommend jobs to others
+	chrome.storage.sync.get("applicationsVisited", function (result) {
+		let sites = result.applicationsVisited;
+		if (!sites.includes(url)) {
+			sites.push(url);
+			console.log(sites);
+			chrome.storage.sync.set({ applicationsVisited: sites });
 		}
 	});
 }
