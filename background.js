@@ -2,7 +2,7 @@ chrome.runtime.onInstalled.addListener(function () {
 	console.log(supportedSites);
 	console.log("Background script has been installed successfully.");
 	chrome.storage.sync.clear();
-	chrome.storage.sync.set({ formData: { defaultProfile }, supportedSites, applicationsSubmitted: [] }, () => {
+	chrome.storage.sync.set({ formData: { defaultProfile }, supportedSites, applicationsVisited: [], unsupportedSites }, () => {
 		console.log("Form has been saved to storage");
 	});
 
@@ -201,3 +201,5 @@ const supportedSites = {
 		"postal-code": "[name='zip']",
 	},
 };
+
+const unsupportedSites = ["apply.workable.com"];
