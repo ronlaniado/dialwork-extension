@@ -68,10 +68,6 @@ function autofill() {
 	suggestAddAutofill();
 }
 
-// Listen if the user clicks on an input that is EMPTY
-// Once the user clicks out of it, check if the input now has a value
-// if there's a value, show dialog suggesting the user to add it as an autofill
-
 function suggestAddAutofill() {
 	$("input, textarea").on("click", function () {
 		if ($(this).val() === "") {
@@ -81,10 +77,10 @@ function suggestAddAutofill() {
 					if ($(this).attr("label")) {
 						console.log($(this).attr("label"));
 						inputTitle = $(this).attr("label");
-					} else if ($(this).attr("id")) {
-						inputTitle = $(this).attr("id");
 					} else if ($(this).attr("name")) {
 						inputTitle = $(this).attr("name");
+					} else if ($(this).attr("id")) {
+						inputTitle = $(this).attr("id");
 					} else {
 						inputTitle = "Title";
 					}
@@ -106,12 +102,12 @@ function displayAddAutofill(inputValue, inputName, inputTitle) {
 				<img src="${imgURL}" alt="Stronghire logo" style="height:40px;width:37px;"/>
 				<p style="margin-left:15px;font-size:18px;">Stronghire Assistant</p>
 			</div>
-			<p style="font-weight:600">Add detected input?</p>
+			<p style="font-weight:600; margin-top:3px;">Add detected input?</p>
 			<div style="display:flex;flex-direction:column;justify-content:center">
-				<input class="dialogTitle" placeholder="Suggested title: ${inputTitle}" style="border-color:#cccccc; border-style:solid; font-size:12px; border-radius:3px; padding:3px; margin:5px; border-width:1px;">
-				<input class="dialogValue" placeholder="Value" value="${inputValue}" style="border-color:#cccccc; border-style:solid; font-size:12px; border-radius:3px; padding:3px; margin:5px; border-width:1px;">
+				<input class="dialogTitle" placeholder="Suggested title: ${inputTitle}" style="border-color:#cccccc; border-style:solid; font-size:12px; border-radius:3px; padding:3px; margin-top:5px; border-width:1px;">
+				<input class="dialogValue" placeholder="Value" value="${inputValue}" style="border-color:#cccccc; border-style:solid; font-size:12px; border-radius:3px; padding:3px; margin-top:10px; border-width:1px;">
 			<div>
-			<div style="display: flex;flex-direction: row;justify-content: space-evenly;margin-top:5px">
+			<div style="display: flex;flex-direction: row;justify-content: space-evenly;margin-top:15px">
 				<button class="dismiss-button" style="">Dismiss</button>
 				<button class="add-button" style="">Add</button>
 			</div>
@@ -142,7 +138,7 @@ function displayAddAutofill(inputValue, inputName, inputTitle) {
 }
 
 function addAutofills() {
-	// Autumatically looks for specific websites and adds autofills for them to make the extension work really well
+	// Autumatically looks for specific websites and adds autofills for them to make the extension predict consistently
 	chrome.storage.sync.get("supportedSites", function (result) {
 		let currentTab = window.location.hostname;
 		let data = result.supportedSites;
