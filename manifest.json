@@ -25,7 +25,6 @@
         "128": "assets/just_logo128.png"
     },
     "permissions": [
-        "declarativeContent",
         "storage",
         "activeTab",
         "clipboardWrite",
