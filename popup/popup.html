@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'" />
 		<link rel="stylesheet" type="text/css" href="popup.css" />
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css" />
+		<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 	</head>
 	<body>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<script src="popup.js"></script>
 		<div class="d-flex row justify-content-center">
-			<button id="autofillButton" class="btn btn-primary m-2">Autofill</button>
+			<button id="autofillButton" class="button is-success m-2">Autofill</button>
 			<!-- <button id="collectButton " class="btn btn-primary m-2">Collect info</button> -->
-			<button id="settingsButton" class="btn btn-primary m-2">Settings</button>
+			<button id="settingsButton" class="button is-info m-2"><i class="fa fa-cog"></i></button>
 		</div>
 		<div class="container"></div>
 	</body>
