@@ -26,13 +26,9 @@ function verifyAutofillSupport(url) {
 	});
 }
 
-if (typeof input === "undefined") {
-	// Assigning to window.input creates the global
-	window.keys = new Array();
-	window.input = new Object();
-}
-
 function collectInfo() {
+	let input = {};
+	let keys = {};
 	$("body input[name]").each(function () {
 		if ($(this).val() !== "") {
 			// Stores all non-empty inputs into an object
