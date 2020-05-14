@@ -1,5 +1,6 @@
 $(document).ready(() => {
 	//addInlineAutofills();
+	injectTray();
 	verifyAutofillSupport(window.location.hostname);
 	saveSite(window.location.href);
 	chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -128,6 +129,7 @@ function displayAddAutofill(inputValue, inputName, inputTitle) {
 		</div>
 	`;
 	$("#dialog-boxes").append(dialogBox);
+	$("#dialog-boxes").draggable();
 	$(".dismiss-button").click(function () {
 		$(this).parent().parent().parent().parent().remove();
 	});
@@ -178,4 +180,16 @@ function saveSite(url) {
 			chrome.storage.sync.set({ applicationsVisited: sites });
 		}
 	});
+}
+
+function injectTray() {
+	let trayHTML = chrome.runtime.getURL("../tray/tray.html");
+	let iframe = `<div id="stronghire-tray" style="z-index:1000;position:fixed;">
+					<div style="width:100%;height:25px;background-color:green;border-top-left-radius:7px; border-top-right-radius:7px;cursor: grab;" id="top-bar" />
+					<iframe title="Stronghire Assistant Tray" src="${trayHTML}" width="300px" height="450px" frameborder="0"></iframe>
+				<div>`;
+
+	$("body").prepend(iframe);
+	$("#stronghire-tray").draggable();
+	console.log("loaded iframe...?");
 }
