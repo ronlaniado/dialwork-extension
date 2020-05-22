@@ -179,13 +179,34 @@ function saveSite(url) {
 }
 
 function injectTray() {
-	let trayHTML = chrome.runtime.getURL("../tray/tray.html");
-	let iframe = `<div id="stronghire-tray" style="z-index:1000;position:fixed;">
-					<div style="width:100%;height:25px;background-color:green;border-top-left-radius:7px; border-top-right-radius:7px;cursor: grab;" id="top-bar" />
-					<iframe title="Stronghire Assistant Tray" src="${trayHTML}" width="300px" height="450px" frameborder="0"></iframe>
+	if (!$("#stronghire-tray").length) {
+		// Checks if tray is already injected
+		let trayHTML = chrome.runtime.getURL("../tray/tray.html");
+		let timesIcon = chrome.runtime.getURL("../assets/icons/times-circle.svg");
+		let stronghireLogo = chrome.runtime.getURL("../assets/logo_with_text.png");
+		let externalLinkIcon = chrome.runtime.getURL("../assets/icons/external-link.svg");
+		let iframe = `<div id="stronghire-tray" style="z-index:1000;position:fixed;	box-shadow: 3px 3px 50px rgba(0, 0, 0, 0.18);border: 1px solid #c3c3c3;opacity: 1; border-radius:7px;">
+					<div style="display: flex;position:relative;flex-direction:row;justify-content:center;align-items:center;width:100%;height:65px;background-color:white;border-bottom: 1px solid #C3C3C3;border-top-left-radius:7px; border-top-right-radius:7px;cursor: grab;" id="top-bar">
+						<div style="order:-1;position:absolute;top:0;left:0;display:flex;flex-direction:column;justify-content:space-evenly;height:100%;">
+							<img src="${timesIcon}" id="timesIcon" height="20px" width="20px" style="cursor:pointer;padding-left: 10px; padding-right:10px;"/>
+							<img src="${externalLinkIcon}" id="externalLinkIcon" height="18px" width="18px" style="cursor:pointer;padding-left:10px;padding-right:10px"/>
+						</div>
+						<img src="${stronghireLogo}" id="stronghireLogo" height="50px" width="185px"/>
+					</div>
+					<iframe title="Stronghire Assistant Tray" src="${trayHTML}" width="400px" height="600px" frameborder="0" style="border-bottom-left-radius:7px; border-bottom-right-radius:7px;"></iframe>
 				<div>`;
 
-	$("body").prepend(iframe);
-	$("#stronghire-tray").draggable();
-	console.log("loaded iframe...?");
+		$("body").prepend(iframe);
+		$("#stronghire-tray").draggable({
+			containtment: "#tray-container",
+		});
+		$("#timesIcon").click(function () {
+			// Close tray on button click
+			$(this).parent().parent().parent().remove();
+		});
+		$("#externalLinkIcon").click(function () {
+			window.open().document.write(iframe);
+		});
+		console.log("loaded iframe...?");
+	}
 }
