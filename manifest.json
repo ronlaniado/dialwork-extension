@@ -49,6 +49,9 @@
     "web_accessible_resources": [
         "assets/just_logo48.png",
         "assets/just_logo32.png",
+        "assets/logo_with_text.png",
+        "assets/icons/external-link.svg",
+        "assets/icons/times-circle.svg",
         "tray/tray.html"
     ],
     "options_page": "options/options.html",
