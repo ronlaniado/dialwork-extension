@@ -193,7 +193,7 @@ function injectTray() {
 						</div>
 						<img src="${stronghireLogo}" id="stronghireLogo" height="50px" width="185px"/>
 					</div>
-					<iframe title="Stronghire Assistant Tray" src="${trayHTML}" width="400px" height="600px" frameborder="0" style="border-bottom-left-radius:7px; border-bottom-right-radius:7px;"></iframe>
+					<iframe title="Stronghire Assistant Tray" src="${trayHTML}" width="400px" height="600px" frameborder="0" style="border-bottom-left-radius:7px; border-bottom-right-radius:7px;" style=""></iframe>
 				<div>`;
 
 		$("body").prepend(iframe);
