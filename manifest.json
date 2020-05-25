@@ -53,7 +53,9 @@
         "assets/logo_with_text.png",
         "assets/icons/external-link.svg",
         "assets/icons/times-circle.svg",
-        "tray/tray.html"
+        "tray/tray.html",
+        "assets/documents/resume.pdf",
+        "assets/documents/cover-letter.pdf"
     ],
     "options_page": "options/options.html",
     "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'"
