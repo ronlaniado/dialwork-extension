@@ -8,6 +8,7 @@ $(document).ready(() => {
 			collectInfo();
 		} else if (request.message === "execAutofill") {
 			autofill();
+			sendResponse({ farewell: "Successfully autofilled from default profile" });
 		}
 	});
 	$("body").append("<div id='dialog-boxes' style='display:flex;flex-direction:column;bottom:0;right:0;position:fixed'></div>");
@@ -198,7 +199,8 @@ function injectTray() {
 
 		$("body").prepend(iframe);
 		$("#stronghire-tray").draggable({
-			containtment: "#tray-container",
+			containtment: "window",
+			scroll: false,
 		});
 		$("#timesIcon").click(function () {
 			// Close tray on button click
