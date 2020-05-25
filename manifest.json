@@ -42,7 +42,8 @@
             ],
             "js": [
                 "scripts/jQuery-3.4.1.js",
-                "scripts/jQueryUI-min.js"
+                "scripts/jQueryUI-min.js",
+                "tray/tray.js"
             ]
         }
     ],
