@@ -6,4 +6,17 @@ $(document).ready(function () {
 			});
 		});
 	});
+	$(".clipboard-icon").click(function (e) {
+		let copyText = $(e.target.parentNode.previousSibling.previousSibling).text();
+		console.log(copyText);
+		let input = document.createElement("input");
+		input.value = copyText;
+		input.style.cssText = "opacity:0; position:fixed";
+		document.body.appendChild(input);
+		input.focus();
+		input.select();
+		document.execCommand("copy");
+		input.remove();
+		console.log("copied!");
+	});
 });
