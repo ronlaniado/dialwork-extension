@@ -15,4 +15,5 @@ $(document).ready(function () {
 		input.select();
 		document.execCommand("copy");
 		input.remove();
+	});
 });
