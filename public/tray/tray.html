@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" type="text/css" href="tray.css" />
+		<title>Stronghire Assistant</title>
+	</head>
+	<body>
+		<script src="../scripts/jQuery-3.4.1.js" type="text/javascript"></script>
+		<script src="tray.js" type="text/javascript"></script>
+
+		<div class="documents-container">
+			<div class="opposites-container">
+				<div class="title" id="resumeText">Resume</div>
+				<div class="icon-container">
+					<img class="icon edit-icon" src="../assets/icons/edit-solid.svg" />
+					<a href="../assets/documents/resume.pdf" download><img class="icon download-icon" src="../assets//icons/download-solid.svg" /> </a>
+				</div>
+			</div>
+			<div class="opposites-container">
+				<div class="title" id="coverletter">Cover Letter</div>
+				<div class="icon-container">
+					<img class="icon" src="../assets/icons/edit-solid.svg" />
+					<a href="../assets/documents/cover-letter.pdf" download>
+						<img class="icon download-icon" src="../assets//icons/download-solid.svg" />
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="search-container">
+			<input class="search" placeholder="Search..." />
+			<div class="search-box"></div>
+		</div>
+		<div class="info-container">
+			<div class="center">YOUR INFO</div>
+			<div class="opposites-container">
+				<div class="title" id="phone">555-555-5555</div>
+				<div class="icon-container">
+					<img class="icon edit-icon" src="../assets/icons/edit-solid.svg" />
+					<img class="icon clipboard-icon" src="../assets//icons/clipboard-solid.svg" />
+				</div>
+			</div>
+			<div class="opposites-container">
+				<div class="title" id="phone">https://gatesnotes.com</div>
+				<div class="icon-container">
+					<img class="icon edit-icon" src="../assets/icons/edit-solid.svg" />
+					<img class="icon clipboard-icon" src="../assets//icons/clipboard-solid.svg" />
+				</div>
+			</div>
+			<div class="opposites-container">
+				<div class="title" id="phone">Seattle, Washington, United States</div>
+				<div class="icon-container">
+					<img class="icon edit-icon" src="../assets/icons/edit-solid.svg" />
+					<img class="icon clipboard-icon" src="../assets//icons/clipboard-solid.svg" />
+				</div>
+			</div>
+		</div>
+		<button class="button" id="autofillButton">Autofill</button>
+	</body>
+</html>

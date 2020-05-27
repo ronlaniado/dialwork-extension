@@ -1,0 +1,65 @@
+{
+    "name": "Stronghire Application Assistant",
+    "version": "0.5",
+    "description": "Chrome extension by Stronghire that helps get hired.",
+    "manifest_version": 2,
+    "background": {
+        "scripts": [
+            "background.js"
+        ],
+        "persistent": false
+    },
+    "browser_action": {
+        "default_popup": "popup/popup.html",
+        "default_icon": {
+            "16": "assets/just_logo16.png",
+            "32": "assets/just_logo32.png",
+            "48": "assets/just_logo48.png",
+            "128": "assets/just_logo128.png"
+        }
+    },
+    "icons": {
+        "16": "assets/just_logo16.png",
+        "32": "assets/just_logo32.png",
+        "48": "assets/just_logo48.png",
+        "128": "assets/just_logo128.png"
+    },
+    "permissions": [
+        "storage",
+        "activeTab",
+        "clipboardWrite",
+        "clipboardRead"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "http://*/*",
+                "https://*/*"
+            ],
+            "all_frames": true,
+            "css": [
+                "scripts/jQueryUI-min.css"
+            ],
+            "js": [
+                "scripts/jQuery-3.4.1.js",
+                "scripts/jQueryUI-min.js",
+                "tray/tray.js"
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        "assets/just_logo48.png",
+        "assets/just_logo32.png",
+        "assets/logo_with_text.png",
+        "assets/icons/external-link.svg",
+        "assets/icons/times-circle.svg",
+        "index.html",
+        "assets/documents/resume.pdf",
+        "assets/documents/cover-letter.pdf",
+        "../src/scripts/jQuery-3.4.1.js",
+        "../src/scripts/jQueryUI-min.js",
+        "tray/tray.html"
+    ],
+    "options_page": "options/options.html",
+    "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'"
+}

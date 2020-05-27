@@ -53,9 +53,12 @@
         "assets/logo_with_text.png",
         "assets/icons/external-link.svg",
         "assets/icons/times-circle.svg",
-        "tray/tray.html",
+        "index.html",
         "assets/documents/resume.pdf",
-        "assets/documents/cover-letter.pdf"
+        "assets/documents/cover-letter.pdf",
+        "../src/scripts/jQuery-3.4.1.js",
+        "../src/scripts/jQueryUI-min.js",
+        "tray/tray.html"
     ],
     "options_page": "options/options.html",
     "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'"

@@ -182,7 +182,7 @@ function saveSite(url) {
 function injectTray() {
 	if (!$("#stronghire-tray").length) {
 		// Checks if tray is already injected
-		let trayHTML = chrome.runtime.getURL("../tray/tray.html");
+		let trayHTML = chrome.runtime.getURL("index.html");
 		let timesIcon = chrome.runtime.getURL("../assets/icons/times-circle.svg");
 		let stronghireLogo = chrome.runtime.getURL("../assets/logo_with_text.png");
 		let externalLinkIcon = chrome.runtime.getURL("../assets/icons/external-link.svg");
