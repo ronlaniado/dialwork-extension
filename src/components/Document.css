@@ -1,0 +1,21 @@
+.title {
+	font-size: 22px;
+	float: left;
+}
+
+.icon-container {
+	display: flex;
+	float: right;
+}
+
+.icon {
+	width: 24px;
+	height: 24px;
+	float: right;
+	margin-left: 10px;
+	vertical-align: baseline;
+}
+
+.icon:hover {
+	cursor: pointer;
+}
